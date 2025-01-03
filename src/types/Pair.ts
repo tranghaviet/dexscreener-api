@@ -3,16 +3,19 @@ export default interface Pair {
   dexId: string;
   url: string;
   pairAddress: string;
+  labels: string[];
   baseToken: {
     address: string;
     name: string;
     symbol: string;
   };
   quoteToken: {
+    address: string;
+    name: string;
     symbol: string;
   };
   priceNative: string;
-  priceUsd?: string;
+  priceUsd: string | null;
   txns: {
     m5: {
       buys: number;
@@ -49,5 +52,14 @@ export default interface Pair {
     quote: number;
   };
   fdv?: number;
+  marketCap?: number;
   pairCreatedAt?: number;
+  info: {
+    imageUri?: string;
+    websites?: string[];
+    socials?: string[];
+    boosts: {
+      active: number;
+    };
+  };
 }

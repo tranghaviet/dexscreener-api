@@ -1,30 +1,26 @@
-import {
-  getAveragePrice,
-  getPairInformationByChain,
-  getPairsMatchingBaseTokenAddress,
-  searchPairsMatchingQuery,
-} from "../index";
+import { DexScreenerApi } from "../index";
 
 const CONSTANTS = {
-  BSC: "bsc",
-  PAIR: "0x7213a321F1855CF1779f42c0CD85d3D95291D34C",
-  TOKEN: "0x2170Ed0880ac9A755fd29B2688956BD959F933F8",
-  QUERY: "WBNB USDC",
+  CHAIN_ID: "solana",
+  PAIR: "dvwbpf4ragzgee2dk7rdlsuf6p7m2m9svc3yqfycs1jj",
+  TOKEN: "JUPyiwrYJFskUPiHa7hkeR8VUtAeFoSYbKedZNsDvCN",
+  QUERY: "SOL/USDC",
 };
 
 describe("DEX API", () => {
-  it("should return pair information by chain", async () => {
-    const pairsResponse = await getPairInformationByChain(
-      CONSTANTS.BSC,
+  const apiClient = new DexScreenerApi();
+  it("should return pairs information by chain", async () => {
+    const pairsResponse = await apiClient.getPairInformationByChain(
+      CONSTANTS.CHAIN_ID,
       CONSTANTS.PAIR
     );
     expect(pairsResponse.schemaVersion).toBe("1.0.0");
-    expect(pairsResponse.pair.chainId).toBe(CONSTANTS.BSC);
+    expect(pairsResponse.pair.chainId).toBe(CONSTANTS.CHAIN_ID);
     expect(pairsResponse.pair.pairAddress).toBe(CONSTANTS.PAIR);
   });
 
   it("should return pairs matching token address", async () => {
-    const tokensResponse = await getPairsMatchingBaseTokenAddress(
+    const tokensResponse = await apiClient.getPairsMatchingBaseTokenAddress(
       CONSTANTS.TOKEN
     );
     expect(tokensResponse.schemaVersion).toBe("1.0.0");
@@ -32,20 +28,10 @@ describe("DEX API", () => {
   });
 
   it("should search for pairs a query", async () => {
-    const searchResponse = await searchPairsMatchingQuery(CONSTANTS.QUERY);
+    const searchResponse = await apiClient.searchPairsMatchingQuery(
+      CONSTANTS.QUERY
+    );
     expect(searchResponse.schemaVersion).toBe("1.0.0");
     expect(searchResponse.pairs.length).toBeGreaterThan(0);
-  });
-
-  it("should return the average price of a token", async () => {
-    const averagePrice = await getAveragePrice(
-      "0xb2e2650dfdb7b2dec4a4455a375ffbfd926ce5fc"
-    );
-    expect(averagePrice).toBeLessThan(1);
-  });
-
-  it("should not be so chatty when no pairs are found", async () => {
-    const averagePrice = await getAveragePrice('0x3a0ea4e0806805527c750ab9b34382642448468d');
-    expect(averagePrice).toBe(0);
   });
 });
