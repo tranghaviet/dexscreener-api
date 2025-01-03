@@ -1,0 +1,17 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Git Pull",
+      "type": "shell",
+      "command": "git pull origin \"$(git rev-parse --symbolic-full-name HEAD)\"",
+      "problemMatcher": [],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "detail": "Pulls the latest changes from the current branch."
+    }
+  ]
+}
+
